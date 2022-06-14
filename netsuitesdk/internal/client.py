@@ -533,34 +533,34 @@ class NetSuiteClient:
         if result.records:
             return result.records
 
-    # def upsertList(self, records):
-    #     """
-    #     Add objects of type recordType with given externalId..
-    #     If a record of specified type with matching externalId already
-    #     exists, it is updated.
+    def upsert_list(self, records):
+        """
+        Add objects of type recordType with given externalId..
+        If a record of specified type with matching externalId already
+        exists, it is updated.
 
-    #     Usage example:
-    #         customer1 = self.Customer(externalId='customer', email='test1@example.com')
-    #         customer2 = self.Customer(externalId='another_customer', email='test2@example.com')
-    #         self.upsertList(records=[customer1, customer2])
+        Usage example:
+            customer1 = self.Customer(externalId='customer', email='test1@example.com')
+            customer2 = self.Customer(externalId='another_customer', email='test2@example.com')
+            self.upsertList(records=[customer1, customer2])
 
-    #     :param list[CompoundValue] records: the records to be created or updated
-    #     :return: a reference to the newly created or updated records
-    #     :rtype: list[CompoundValue]
-    #     """
+        :param list[CompoundValue] records: the records to be created or updated
+        :return: a reference to the newly created or updated records
+        :rtype: list[CompoundValue]
+        """
 
-    #     response = self.request('upsertList', record=records)
-    #     responses = response.body.writeResponse
-    #     record_refs = []
-    #     for response in responses:
-    #         status = response.status
-    #         if status.isSuccess:
-    #             record_ref = response['baseRef']
-    #             self.logger.debug('Successfully updated record of type {type}, internalId: {internalId}, externalId: {externalId}'.format(
-    #                     type=record_ref['type'], internalId=record_ref['internalId'], externalId=record_ref['externalId']))
-    #             record_refs.append(record_ref)
-    #         else:
-    #             exc = self._request_error('upsertList', detail=status['statusDetail'][0])
-    #             has_failures = True
-    #             raise exc
-    #     return record_refs
+        response = self.request('upsertList', record=records)
+        responses = response.body.writeResponse
+        record_refs = []
+        for response in responses:
+            status = response.status
+            if status.isSuccess:
+                record_ref = response['baseRef']
+                self.logger.debug('Successfully updated record of type {type}, internalId: {internalId}, externalId: {externalId}'.format(
+                        type=record_ref['type'], internalId=record_ref['internalId'], externalId=record_ref['externalId']))
+                record_refs.append(record_ref)
+            else:
+                exc = self._request_error('upsertList', detail=status['statusDetail'][0])
+                has_failures = True
+                raise exc
+        return record_refs
