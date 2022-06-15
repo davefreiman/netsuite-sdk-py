@@ -551,8 +551,13 @@ class NetSuiteClient:
 
         response = self.request('upsertList', record=records)
         responses = response.body.writeResponseList
+        print(responses)
+        print(type(responses))
         record_refs = []
         for response in responses:
+            print(response)
+            print(type(response))
+            print(dir(response))
             status = response.status
             if status.isSuccess:
                 record_ref = response['baseRef']
