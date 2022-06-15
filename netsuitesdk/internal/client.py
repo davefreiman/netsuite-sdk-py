@@ -550,7 +550,7 @@ class NetSuiteClient:
         """
 
         response = self.request('upsertList', record=records)
-        responses = response.body.writeResponse
+        responses = response.body.writeResponseList
         record_refs = []
         for response in responses:
             status = response.status
