@@ -551,21 +551,20 @@ class NetSuiteClient:
 
         response = self.request('upsertList', record=records)
         responses = response.body.writeResponseList
-        print(responses)
-        print(type(responses))
+        status = responses['status']
         record_refs = []
-        for response in responses:
-            print(response)
-            print(type(response))
-            print(dir(response))
-            status = response.status
-            if status.isSuccess:
-                record_ref = response['baseRef']
+        if status.isSuccess:
+            for response in responses.writeResponse:
+                object_reference = response['baseRef']
+                record_ref = {
+                    "object_reference": object_reference,
+                    "status": response["status"]
+                }
                 self.logger.debug('Successfully updated record of type {type}, internalId: {internalId}, externalId: {externalId}'.format(
-                        type=record_ref['type'], internalId=record_ref['internalId'], externalId=record_ref['externalId']))
+                        type=object_reference['type'], internalId=object_reference['internalId'], externalId=object_reference['externalId']))
                 record_refs.append(record_ref)
-            else:
-                exc = self._request_error('upsertList', detail=status['statusDetail'][0])
-                has_failures = True
-                raise exc
+        else:
+            exc = self._request_error('upsertList', detail=status['statusDetail'][0])
+            raise exc
+
         return record_refs
